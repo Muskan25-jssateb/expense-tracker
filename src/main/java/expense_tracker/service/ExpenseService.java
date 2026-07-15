@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.time.LocalDate;
 import expense_tracker.dto.DashboardResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class ExpenseService {
@@ -86,6 +88,10 @@ public class ExpenseService {
         dashboard.setCategorySummary(getCategorySummary());
 
         return dashboard;
+    }
+
+    public Page<Expense> getExpenses(Pageable pageable) {
+        return expenseRepository.findAll(pageable);
     }
 
 }

@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.time.LocalDate;
 import expense_tracker.dto.DashboardResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/expenses")
@@ -76,5 +78,10 @@ public class ExpenseController {
     @GetMapping("/dashboard")
     public DashboardResponse getDashboard() {
         return expenseService.getDashboard();
+    }
+
+    @GetMapping("/page")
+    public Page<Expense> getExpenses(Pageable pageable) {
+        return expenseService.getExpenses(pageable);
     }
 }
