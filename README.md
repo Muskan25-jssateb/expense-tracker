@@ -4,42 +4,41 @@ A Spring Boot based Expense Tracker application that allows users to manage expe
 
 ##  Features
 
-- Add Expense
-- View All Expenses
-- View Expense by ID
-- Update Expense
-- Delete Expense
-- Total Expense Calculation
-- Category-wise Expense Summary
-- Search Expenses by Category
-- Search Expenses by Date Range
-- Highest Expense
+- Create, Read, Update and Delete (CRUD) expenses
+- Search expenses by category
+- Search expenses by date range
+- Calculate total expenses
+- Category-wise expense summary
+- Highest expense retrieval
 - Dashboard API
-- Input Validation
+- Pagination
+- Sorting
+- Bean Validation
 - Global Exception Handling
+- Interactive API Documentation using Swagger/OpenAPI
 
-## Tech Stack
+##  Tech Stack
 
 - Java 21
-- Spring Boot
+- Spring Boot 3
 - Spring Data JPA
 - Hibernate
 - MySQL
 - Maven
 - Lombok
+- Swagger / OpenAPI
 - Postman
+- Git & GitHub
 
-##  Project Structure
+##  Architecture
 
-```
 Controller
-   ↓
+        ↓
 Service
-   ↓
+        ↓
 Repository
-   ↓
+        ↓
 MySQL Database
-```
 
 ##  REST APIs
 
@@ -57,11 +56,13 @@ MySQL Database
 | GET | /expenses/highest |
 | GET | /expenses/dashboard |
 
-## Future Enhancements
+##  Future Enhancements
 
-- Swagger Documentation
 - JWT Authentication
-- Budget Tracking
-- Pagination & Sorting
+- User Registration & Login
+- User-specific Expenses
+- Budget Management
 - React Frontend
-- Docker Deployment
+- Charts & Analytics Dashboard
+- Docker
+- Deployment (Render/Railway)
