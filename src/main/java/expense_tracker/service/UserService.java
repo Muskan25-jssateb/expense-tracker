@@ -5,17 +5,21 @@ import expense_tracker.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import expense_tracker.dto.LoginRequest;
+import expense_tracker.security.JwtService;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public UserService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                       JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public User registerUser(User user) {
@@ -38,6 +42,6 @@ public class UserService {
             throw new RuntimeException("Invalid email or password");
         }
 
-        return "Login Successful";
+        return jwtService.generateToken(user.getEmail());
     }
 }
