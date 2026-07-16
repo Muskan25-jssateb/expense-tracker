@@ -4,29 +4,32 @@ A Spring Boot based Expense Tracker application that allows users to manage expe
 
 ##  Features
 
-- Create, Read, Update and Delete (CRUD) expenses
-- Search expenses by category
-- Search expenses by date range
-- Calculate total expenses
-- Category-wise expense summary
-- Highest expense retrieval
+- CRUD operations for expenses
+- Search by category
+- Search by date range
 - Dashboard API
+- Total expense calculation
+- Highest expense retrieval
+- Category-wise expense summary
 - Pagination
 - Sorting
 - Bean Validation
 - Global Exception Handling
-- Interactive API Documentation using Swagger/OpenAPI
+- Swagger/OpenAPI Documentation
+- User Registration
+- Password Encryption using BCrypt
 
 ##  Tech Stack
 
 - Java 21
 - Spring Boot 3
+- Spring Security
 - Spring Data JPA
 - Hibernate
 - MySQL
 - Maven
 - Lombok
-- Swagger / OpenAPI
+- Swagger/OpenAPI
 - Postman
 - Git & GitHub
 
