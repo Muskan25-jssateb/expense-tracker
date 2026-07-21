@@ -25,4 +25,5 @@ public class AuthController {
     public String loginUser(@Valid @RequestBody LoginRequest loginRequest) {
         return userService.loginUser(loginRequest);
     }
+
 }

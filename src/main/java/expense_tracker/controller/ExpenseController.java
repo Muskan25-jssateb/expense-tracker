@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import expense_tracker.dto.DashboardResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import expense_tracker.dto.ExpenseResponse;
 
 @RestController
 @RequestMapping("/expenses")
@@ -22,10 +23,11 @@ public class ExpenseController {
     }
 
 
+
     @PostMapping
-    public Expense addExpense(@Valid @RequestBody Expense expense) {
+    public ExpenseResponse addExpense(@Valid @RequestBody Expense expense) {
         return expenseService.saveExpense(expense);
-   }
+    }
     @GetMapping
     public List<Expense> getAllExpenses() {
         return expenseService.getAllExpenses();

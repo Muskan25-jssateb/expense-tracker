@@ -31,4 +31,8 @@ public class Expense {
     @PastOrPresent(message = "Future dates are not allowed")
     private LocalDate date;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 }

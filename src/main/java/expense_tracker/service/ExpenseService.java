@@ -10,17 +10,47 @@ import java.time.LocalDate;
 import expense_tracker.dto.DashboardResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import expense_tracker.repository.UserRepository;
+import expense_tracker.entity.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import expense_tracker.dto.ExpenseResponse;
 
 @Service
 public class ExpenseService {
 
     private final ExpenseRepository expenseRepository;
+    private final UserRepository userRepository;
 
-    public ExpenseService(ExpenseRepository expenseRepository) {
+    public ExpenseService(ExpenseRepository expenseRepository,
+                          UserRepository userRepository) {
+
         this.expenseRepository = expenseRepository;
+        this.userRepository = userRepository;
     }
-    public Expense saveExpense(Expense expense) {
-        return expenseRepository.save(expense);
+    public ExpenseResponse saveExpense(Expense expense) {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        expense.setUser(user);
+
+        Expense savedExpense = expenseRepository.save(expense);
+
+        ExpenseResponse response = new ExpenseResponse();
+
+        response.setId(savedExpense.getId());
+        response.setCategory(savedExpense.getCategory());
+        response.setAmount(savedExpense.getAmount());
+        response.setDescription(savedExpense.getDescription());
+        response.setDate(savedExpense.getDate());
+
+        return response;
     }
     public List<Expense> getAllExpenses() {
         return expenseRepository.findAll();
