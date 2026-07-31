@@ -29,12 +29,12 @@ public class ExpenseController {
         return expenseService.saveExpense(expense);
     }
     @GetMapping
-    public List<Expense> getAllExpenses() {
+    public List<ExpenseResponse> getAllExpenses() {
         return expenseService.getAllExpenses();
     }
 
     @GetMapping("/{id}")
-    public Expense getExpenseById(@PathVariable Long id) {
+    public ExpenseResponse getExpenseById(@PathVariable Long id) {
         return expenseService.getExpenseById(id);
     }
 
@@ -49,8 +49,8 @@ public class ExpenseController {
     }
 
     @PutMapping("/{id}")
-    public Expense updateExpense(@PathVariable Long id,
-                                 @Valid @RequestBody Expense expense) {
+    public ExpenseResponse updateExpense(@PathVariable Long id,
+                                         @RequestBody @Valid Expense expense) {
         return expenseService.updateExpense(id, expense);
     }
 
@@ -60,12 +60,12 @@ public class ExpenseController {
     }
 
     @GetMapping("/search")
-    public List<Expense> getExpensesByCategory(@RequestParam String category) {
+    public List<ExpenseResponse> getExpensesByCategory(@RequestParam String category) {
         return expenseService.getExpensesByCategory(category);
     }
 
     @GetMapping("/date-range")
-    public List<Expense> getExpensesBetweenDates(
+    public List<ExpenseResponse> getExpensesBetweenDates(
             @RequestParam LocalDate start,
             @RequestParam LocalDate end) {
 
@@ -73,7 +73,7 @@ public class ExpenseController {
     }
 
     @GetMapping("/highest")
-    public Expense getHighestExpense() {
+    public ExpenseResponse getHighestExpense() {
         return expenseService.getHighestExpense();
     }
 
@@ -83,7 +83,7 @@ public class ExpenseController {
     }
 
     @GetMapping("/page")
-    public Page<Expense> getExpenses(Pageable pageable) {
+    public Page<ExpenseResponse> getExpenses(Pageable pageable) {
         return expenseService.getExpenses(pageable);
     }
 }
