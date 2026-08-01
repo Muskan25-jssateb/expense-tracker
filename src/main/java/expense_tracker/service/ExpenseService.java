@@ -129,7 +129,10 @@ public class ExpenseService {
 
         Expense expense = expenseRepository
                 .findByIdAndUser(id, user)
-                .orElseThrow(() -> new RuntimeException("Expense not found"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Expense not found"
+                ));
 
         expense.setCategory(updatedExpense.getCategory());
         expense.setAmount(updatedExpense.getAmount());
@@ -312,7 +315,10 @@ public class ExpenseService {
         String email = authentication.getName();
 
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "User not found"
+                ));
     }
 
 
