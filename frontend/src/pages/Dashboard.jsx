@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
 import { getDashboard } from "../services/expenseService";
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    Tooltip,
+    ResponsiveContainer
+} from "recharts";
 
 function Dashboard() {
 
@@ -39,6 +47,13 @@ function Dashboard() {
             </div>
         );
     }
+
+    const chartData = Object.entries(
+    dashboard.categorySummary || {}
+).map(([category, amount]) => ({
+    category: category,
+    amount: amount
+}));
 
     return (
         <div className="container mt-4">
@@ -113,6 +128,37 @@ function Dashboard() {
                 ))}
 
             </div>
+
+            <div className="card shadow-sm p-4 mt-4">
+
+    <h5 className="mb-4">
+        Spending by Category
+    </h5>
+
+    <div style={{ width: "100%", height: 350 }}>
+
+        <ResponsiveContainer width="100%" height="100%">
+
+            <BarChart data={chartData}>
+
+                <XAxis dataKey="category" />
+
+                <YAxis />
+
+                <Tooltip />
+
+                <Bar
+                    dataKey="amount"
+                    fill="#0d6efd"
+                />
+
+            </BarChart>
+
+        </ResponsiveContainer>
+
+    </div>
+
+</div>
 
         </div>
     );

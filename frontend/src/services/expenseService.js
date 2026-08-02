@@ -35,3 +35,18 @@ export const getHighestExpense = () => {
 export const getCategorySummary = () => {
     return api.get("/expenses/category-summary");
 };
+
+export const searchByCategory = (category) => {
+    return api.get("/expenses/search", {
+        params: { category }
+    });
+};
+
+export const getExpensesByDateRange = (startDate, endDate) => {
+    return api.get("/expenses/date-range", {
+        params: {
+            start: startDate,
+            end: endDate
+        }
+    });
+};

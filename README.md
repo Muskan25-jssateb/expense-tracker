@@ -1,59 +1,42 @@
 # Expense Tracker
 
-A full-stack Expense Tracker application built with **Spring Boot, React, and MySQL**.
+A full-stack Expense Tracker application built with Spring Boot and React that allows users to securely manage expenses, analyze spending patterns, and visualize expense data.
 
-The application allows users to securely register and log in, manage their personal expenses, and view expense analytics through a dashboard.
+The application uses JWT-based authentication and provides user-specific expense tracking with dashboard analytics, filtering, and data visualization.
 
 ## Features
 
 ### Authentication & Security
-- User Registration
-- User Login
+- User Registration and Login
 - JWT Authentication
-- BCrypt Password Encryption
-- Protected Backend APIs
-- Protected React Routes
-- User-Specific Expense Management
-- Logout Functionality
+- Password Encryption using BCrypt
+- Spring Security
+- Protected Frontend Routes
+- User-specific Expenses
 
 ### Expense Management
-- Add Expense
-- View Expenses
-- View Expense by ID
-- Update Expense
-- Delete Expense
-- Search by Category
-- Search by Date Range
-- Pagination
-- Sorting
+- Add Expenses
+- View Expense History
+- Update Expenses
+- Delete Expenses
+- Search Expenses by Category
+- Filter Expenses by Date Range
 - Bean Validation
+- Global Exception Handling
 
 ### Dashboard & Analytics
 - Total Expense Calculation
 - Expense Count
-- Highest Expense Retrieval
+- Highest Expense
 - Category-wise Expense Summary
-- Dashboard API
-- Live React Dashboard
+- Category-wise Spending Bar Chart
 
 ### Backend
-- RESTful API Architecture
-- Spring Security
-- JWT-based Authorization
-- Global Exception Handling
-- Swagger / OpenAPI Documentation
-
-### Frontend
-- React + Vite
-- Login Page
-- Registration Page
-- Protected Routes
-- Dashboard
-- Expense Management
-- Add / Edit / Delete Expenses
-- Navigation & Logout
-- Axios API Integration
-- Bootstrap UI
+- RESTful APIs
+- Pagination
+- Sorting
+- Swagger/OpenAPI Documentation
+- Layered Architecture
 
 ## Tech Stack
 
@@ -63,58 +46,67 @@ The application allows users to securely register and log in, manage their perso
 - Spring Security
 - Spring Data JPA
 - Hibernate
+- JWT
 - MySQL
 - Maven
 - Lombok
-- JWT
 - Swagger / OpenAPI
 
 ### Frontend
 - React
-- Vite
 - JavaScript
-- React Router
+- Vite
 - Axios
 - Bootstrap
 - Recharts
 
 ### Tools
+- Git & GitHub
 - Postman
-- Swagger UI
-- Git
-- GitHub
+- IntelliJ IDEA
+- VS Code
 
 ## Architecture
 
 ```text
 React Frontend
-      ↓
-    Axios
-      ↓
-JWT Authentication
-      ↓
-Spring Boot REST API
-      ↓
-   Service Layer
-      ↓
-Spring Data JPA
-      ↓
- MySQL Database
+      |
+      | Axios / REST API
+      v
+Spring Boot Backend
+      |
+      v
+Controller
+      |
+      v
+Service
+      |
+      v
+Repository
+      |
+      v
+MySQL Database
 ```
 
-## Project Structure
+## Authentication Flow
 
 ```text
-expense-tracker/
-│
-├── src/                 # Spring Boot Backend
-├── frontend/            # React Frontend
-│   ├── src/
-│   ├── public/
-│   └── package.json
-│
-├── pom.xml
-└── README.md
+Register / Login
+       |
+       v
+Spring Security
+       |
+       v
+JWT Generated
+       |
+       v
+React stores JWT
+       |
+       v
+JWT sent with protected API requests
+       |
+       v
+User-specific expense data
 ```
 
 ## REST APIs
@@ -122,75 +114,114 @@ expense-tracker/
 ### Authentication
 
 | Method | Endpoint | Description |
-|--------|----------|-------------|
+|---|---|---|
 | POST | `/auth/register` | Register a new user |
 | POST | `/auth/login` | Login and receive JWT |
 
 ### Expenses
 
 | Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/expenses` | Add an expense |
-| GET | `/expenses` | Get user's expenses |
+|---|---|---|
+| POST | `/expenses` | Add expense |
+| GET | `/expenses` | Get expenses |
 | GET | `/expenses/{id}` | Get expense by ID |
-| PUT | `/expenses/{id}` | Update an expense |
-| DELETE | `/expenses/{id}` | Delete an expense |
+| PUT | `/expenses/{id}` | Update expense |
+| DELETE | `/expenses/{id}` | Delete expense |
 | GET | `/expenses/total` | Get total expense |
-| GET | `/expenses/category-summary` | Get category-wise summary |
+| GET | `/expenses/category-summary` | Category-wise summary |
 | GET | `/expenses/search?category=Food` | Search by category |
-| GET | `/expenses/date-range` | Filter by date range |
+| GET | `/expenses/date-range?start=YYYY-MM-DD&end=YYYY-MM-DD` | Filter by date range |
 | GET | `/expenses/highest` | Get highest expense |
 | GET | `/expenses/dashboard` | Get dashboard analytics |
-| GET | `/expenses/paged` | Get paginated expenses |
 
-## Authentication Flow
+## Project Structure
 
 ```text
-User Login
-    ↓
-Spring Boot validates credentials
-    ↓
-JWT generated
-    ↓
-React stores JWT
-    ↓
-Axios sends JWT with API requests
-    ↓
-Spring Security validates JWT
-    ↓
-User accesses protected resources
+expense-tracker/
+│
+├── src/                    # Spring Boot backend
+│   └── main/
+│       └── java/
+│
+├── frontend/               # React frontend
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── services/
+│   └── package.json
+│
+├── pom.xml
+└── README.md
 ```
 
-Each user's expenses are isolated so authenticated users can only access their own expense data.
+## Running the Project
 
-## Current Progress
+### Backend
 
-- [x] Spring Boot REST API
-- [x] MySQL Integration
-- [x] Expense CRUD
-- [x] Bean Validation
-- [x] Global Exception Handling
-- [x] Swagger Documentation
-- [x] User Registration
-- [x] User Login
-- [x] BCrypt Password Encryption
-- [x] JWT Authentication
-- [x] User-Specific Expenses
-- [x] React Frontend
-- [x] Login & Registration UI
-- [x] Protected Routes
-- [x] Dashboard
-- [x] Add Expense
-- [x] Edit Expense
-- [x] Delete Expense
-- [x] Logout
+Configure the MySQL database in the application configuration and run the Spring Boot application.
 
-## Future Enhancements
+Backend runs on:
 
-- Frontend Category & Date Filters
-- Interactive Charts & Advanced Analytics
-- AI-Powered Spending Insights
-- Budget Management
+```text
+http://localhost:8080
+```
+
+Swagger documentation:
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+
+### Frontend
+
+Navigate to:
+
+```bash
+cd frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Frontend runs on:
+
+```text
+http://localhost:5173
+```
+
+## Upcoming Features
+
+- Monthly Budget Management
+- Budget Usage Progress Tracking
+- Recommended Daily Spending Limit
+- Month-over-Month Expense Comparison
+- Category-wise Monthly Comparison
+- AI-powered Spending Insights
+- Spending Recommendations
 - Improved Responsive UI
-- Docker Containerization
-- Cloud Deployment
+- Docker
+- Deployment
+
+## Planned AI Insights
+
+The analytics system will use calculated spending data to provide insights such as:
+
+- Comparison with the previous month's spending
+- Categories with the largest spending increase
+- Categories where spending decreased
+- Remaining monthly budget
+- Recommended daily spending based on remaining budget
+- Potential areas where spending can be reduced
+
+## Future Goal
+
+The goal is to evolve the project from a traditional expense tracker into an intelligent personal finance assistant that helps users understand their spending habits and make better budgeting decisions.

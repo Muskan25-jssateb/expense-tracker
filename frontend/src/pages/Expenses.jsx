@@ -3,7 +3,9 @@ import {
     getExpenses,
     addExpense,
     deleteExpense,
-    updateExpense
+    updateExpense,
+    searchByCategory,
+    getExpensesByDateRange
 } from "../services/expenseService";
 
 function Expenses() {
@@ -20,6 +22,9 @@ function Expenses() {
     const [error, setError] = useState("");
 
     const [editingId, setEditingId] = useState(null);
+    const [searchCategory, setSearchCategory] = useState("");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
 
     const loadExpenses = async () => {
         try {
@@ -110,6 +115,46 @@ function Expenses() {
             setError("Unable to delete expense");
         }
     };
+
+    const handleSearch = async () => {
+    setError("");
+
+    try {
+        if (searchCategory.trim() === "") {
+            loadExpenses();
+            return;
+        }
+
+        const response = await searchByCategory(searchCategory);
+        setExpenses(response.data);
+
+    } catch (err) {
+        console.error(err);
+        setError("Unable to search expenses");
+    }
+};
+
+const handleDateFilter = async () => {
+    setError("");
+
+    if (!startDate || !endDate) {
+        setError("Please select both start and end dates");
+        return;
+    }
+
+    try {
+        const response = await getExpensesByDateRange(
+            startDate,
+            endDate
+        );
+
+        setExpenses(response.data);
+
+    } catch (err) {
+        console.error(err);
+        setError("Unable to filter expenses by date");
+    }
+};
 
     return (
         <div className="container mt-4">
@@ -210,6 +255,85 @@ function Expenses() {
                   Expense History
                 </h5>
 
+               {/* Category Search */}
+<div className="row mb-4 align-items-end">
+
+    <div className="col-md-6">
+        <label className="form-label">Category</label>
+        <input
+            type="text"
+            className="form-control"
+            placeholder="Search by category..."
+            value={searchCategory}
+            onChange={(e) => setSearchCategory(e.target.value)}
+        />
+    </div>
+
+    <div className="col-md-4">
+        <button
+            className="btn btn-primary me-2"
+            onClick={handleSearch}
+        >
+            Search
+        </button>
+
+        <button
+            className="btn btn-secondary"
+            onClick={() => {
+                setSearchCategory("");
+                loadExpenses();
+            }}
+        >
+            Reset
+        </button>
+    </div>
+
+</div>
+
+{/* Date Range Filter */}
+<div className="row mb-4 align-items-end">
+
+    <div className="col-md-3">
+        <label className="form-label">From Date</label>
+        <input
+            type="date"
+            className="form-control"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+        />
+    </div>
+
+    <div className="col-md-3">
+        <label className="form-label">To Date</label>
+        <input
+            type="date"
+            className="form-control"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+        />
+    </div>
+
+    <div className="col-md-4">
+        <button
+            className="btn btn-primary me-2"
+            onClick={handleDateFilter}
+        >
+            Filter
+        </button>
+
+        <button
+            className="btn btn-secondary"
+            onClick={() => {
+                setStartDate("");
+                setEndDate("");
+                loadExpenses();
+            }}
+        >
+            Reset
+        </button>
+    </div>
+
+</div>
                 {expenses.length === 0 ? (
 
                     <p>No expenses added yet.</p>
