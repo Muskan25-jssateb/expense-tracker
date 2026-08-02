@@ -12,7 +12,7 @@ public class DashboardResponse {
 
     private Long expenseCount;
 
-    private Expense highestExpense;
+    private ExpenseResponse highestExpense;
 
     private Map<String, Double> categorySummary;
 
