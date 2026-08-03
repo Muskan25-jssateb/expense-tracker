@@ -1,8 +1,8 @@
 # Expense Tracker
 
-A full-stack Expense Tracker application built with Spring Boot and React that allows users to securely manage expenses, analyze spending patterns, and visualize expense data.
+A full-stack intelligent Expense Tracker built with Spring Boot and React that allows users to securely manage expenses, set monthly budgets, analyze spending patterns, compare monthly spending, and receive data-driven financial insights.
 
-The application uses JWT-based authentication and provides user-specific expense tracking with dashboard analytics, filtering, and data visualization.
+The application uses JWT-based authentication and provides user-specific expense tracking with dashboard analytics, budget monitoring, spending recommendations, month-over-month comparisons, and interactive data visualization.
 
 ## Features
 
@@ -30,6 +30,18 @@ The application uses JWT-based authentication and provides user-specific expense
 - Highest Expense
 - Category-wise Expense Summary
 - Category-wise Spending Bar Chart
+- Monthly Budget Tracking
+- Budget Usage Percentage and Progress Bar
+- Remaining Budget Calculation
+- Recommended Daily Spending Limit
+- Projected Month-end Spending
+- Budget Overspending Warning
+- Month-over-Month Expense Comparison
+- Monthly Spending Percentage Change
+- Category-wise Monthly Comparison
+- Largest Category Spending Increase Detection
+- Largest Category Spending Decrease Detection
+- Rule-based Smart Spending Insights
 
 ### Backend
 - RESTful APIs
@@ -75,19 +87,22 @@ React Frontend
       v
 Spring Boot Backend
       |
-      v
-Controller
-      |
-      v
-Service
-      |
-      v
-Repository
-      |
-      v
-MySQL Database
+      +--------------------+
+      |                    |
+      v                    v
+Authentication         Financial Analytics
+JWT + Security         Budget Tracking
+      |                Monthly Comparison
+      |                Spending Insights
+      |                    |
+      +---------+----------+
+                |
+                v
+          Spring Data JPA
+                |
+                v
+          MySQL Database
 ```
-
 ## Authentication Flow
 
 ```text
@@ -134,16 +149,33 @@ User-specific expense data
 | GET | `/expenses/highest` | Get highest expense |
 | GET | `/expenses/dashboard` | Get dashboard analytics |
 
+### Budgets
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/budgets` | Set or update monthly budget |
+| GET | `/budgets` | Get budget for a specific month |
+| GET | `/budgets/summary` | Get budget, spending, remaining amount, and usage percentage |
+| GET | `/budgets/comparison` | Compare current and previous month spending and categories |
+
 ## Project Structure
 
 ```text
 expense-tracker/
 │
-├── src/                    # Spring Boot backend
+├── src/
 │   └── main/
 │       └── java/
+│           └── expense_tracker/
+│               ├── config/
+│               ├── controller/
+│               ├── dto/
+│               ├── entity/
+│               ├── repository/
+│               ├── security/
+│               └── service/
 │
-├── frontend/               # React frontend
+├── frontend/
 │   ├── src/
 │   │   ├── components/
 │   │   ├── pages/
@@ -200,27 +232,30 @@ http://localhost:5173
 
 ## Upcoming Features
 
-- Monthly Budget Management
-- Budget Usage Progress Tracking
-- Recommended Daily Spending Limit
-- Month-over-Month Expense Comparison
-- Category-wise Monthly Comparison
-- AI-powered Spending Insights
-- Spending Recommendations
+- Machine Learning-based Expense Forecasting
+- AI-powered Personalized Spending Insights
+- Improved Spending Forecast Reliability
+- Anomaly Detection for Unusual Expenses
 - Improved Responsive UI
 - Docker
 - Deployment
 
-## Planned AI Insights
+## Smart Spending Insights
 
-The analytics system will use calculated spending data to provide insights such as:
+The application currently analyzes expense and budget data to generate rule-based financial insights, including:
 
 - Comparison with the previous month's spending
+- Percentage increase or decrease in monthly spending
 - Categories with the largest spending increase
 - Categories where spending decreased
 - Remaining monthly budget
-- Recommended daily spending based on remaining budget
-- Potential areas where spending can be reduced
+- Recommended daily spending based on the remaining budget
+- Projected month-end spending
+- Warnings when current spending trends may exceed the monthly budget
+
+### Planned AI & ML Enhancements
+
+The next development phase will introduce machine learning-based expense forecasting and AI-generated personalized financial recommendations using the application's existing analytics data.
 
 ## Future Goal
 
