@@ -50,3 +50,40 @@ export const getExpensesByDateRange = (startDate, endDate) => {
         }
     });
 };
+
+export const getBudget = (month, year) => {
+    return api.get("/budgets", {
+        params: {
+            month,
+            year
+        }
+    });
+};
+
+export const setBudget = (amount, month, year) => {
+    return api.post("/budgets", null, {
+        params: {
+            amount,
+            month,
+            year
+        }
+    });
+};
+
+export const getBudgetSummary = (month, year) => {
+    return api.get("/budgets/summary", {
+        params: {
+            month,
+            year
+        }
+    });
+};
+
+export const getMonthlyComparison = (month, year) => {
+    return api.get("/budgets/comparison", {
+        params: {
+            month,
+            year
+        }
+    });
+};
