@@ -179,7 +179,25 @@ The system uses JWT-based authentication to provide user-specific expense tracki
                                  v
                            MySQL Database
 ```
+## Screenshots
 
+### Dashboard Overview
+![Dashboard Overview](docs/screenshots/Dashboard%20Overview.png)
+
+### Monthly Budget Tracking
+![Monthly Budget](docs/screenshots/Monthly%20Budget.png)
+
+### Spending by Category
+![Spending by Category](docs/screenshots/Spending%20by%20Category.png)
+
+### ML Expense Forecast
+![ML Expense Forecast](docs/screenshots/ML%20Expense%20Forecast.png)
+
+### AI Spending Assistant
+![AI Spending Assistant](docs/screenshots/AI%20Spending%20Assistant.png)
+
+### Expense Management
+![Expense Management](docs/screenshots/Expense%20Management.png)
 ---
 
 ## Intelligent Insight Flow
@@ -663,3 +681,4 @@ Generative AI
 ```
 
 to provide users with a more informative and intelligent expense-management experience.
+

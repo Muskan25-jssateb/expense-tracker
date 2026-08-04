@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import {
     getDashboard,
     getBudgetSummary,
@@ -613,11 +614,12 @@ const handleSetBudget = async (e) => {
             <div
                  className="border rounded p-3 mb-3 bg-light"
                  style={{
-                     whiteSpace: "pre-line",
                      lineHeight: "1.7"
                   }}
             >
-                {aiInsights}
+                 <ReactMarkdown>
+                   {aiInsights}
+                 </ReactMarkdown>
             </div>
 
             <button
