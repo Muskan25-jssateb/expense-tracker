@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import expense_tracker.dto.BudgetSummary;
 import expense_tracker.dto.MonthlyComparison;
 import java.math.BigDecimal;
+import expense_tracker.dto.MLForecastResponse;
 
 @RestController
 @RequestMapping("/budgets")
@@ -82,5 +83,15 @@ public class BudgetController {
                 month,
                 year
         );
+    }
+
+    @GetMapping("/forecast")
+    public MLForecastResponse getMLForecast(
+            Authentication authentication
+    ) {
+
+        String email = authentication.getName();
+
+        return budgetService.getMLForecast(email);
     }
 }

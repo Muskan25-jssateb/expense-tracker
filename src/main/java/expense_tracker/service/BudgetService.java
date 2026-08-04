@@ -17,6 +17,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import java.math.BigDecimal;
+import expense_tracker.dto.MLForecastRequest;
+import expense_tracker.dto.MLForecastResponse;
 
 @Service
 public class BudgetService {
@@ -24,15 +26,18 @@ public class BudgetService {
     private final BudgetRepository budgetRepository;
     private final UserRepository userRepository;
     private final ExpenseRepository expenseRepository;
+    private final MLForecastService mlForecastService;
 
     public BudgetService(
             BudgetRepository budgetRepository,
             UserRepository userRepository,
-            ExpenseRepository expenseRepository
+            ExpenseRepository expenseRepository,
+            MLForecastService mlForecastService
     ) {
         this.budgetRepository = budgetRepository;
         this.userRepository = userRepository;
         this.expenseRepository = expenseRepository;
+        this.mlForecastService = mlForecastService;
     }
 
     public Budget setBudget(
@@ -211,6 +216,83 @@ public class BudgetService {
                 currentCategories,
                 previousCategories
         );
+    }
+
+    public MLForecastResponse getMLForecast(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found")
+                );
+
+        LocalDate today = LocalDate.now();
+
+        LocalDate currentMonthStart =
+                today.withDayOfMonth(1);
+
+        LocalDate previousMonthStart =
+                currentMonthStart.minusMonths(1);
+
+        LocalDate previousMonthEnd =
+                currentMonthStart.minusDays(1);
+
+
+        List<Expense> currentExpenses =
+                expenseRepository.findByUserAndDateBetween(
+                        user,
+                        currentMonthStart,
+                        today
+                );
+
+        double spentSoFar = currentExpenses.stream()
+                .mapToDouble(Expense::getAmount)
+                .sum();
+
+
+        List<Expense> previousExpenses =
+                expenseRepository.findByUserAndDateBetween(
+                        user,
+                        previousMonthStart,
+                        previousMonthEnd
+                );
+
+        double previousMonthSpend = previousExpenses.stream()
+                .mapToDouble(Expense::getAmount)
+                .sum();
+
+
+        Budget budget = budgetRepository
+                .findByUserAndMonthAndYear(
+                        user,
+                        today.getMonthValue(),
+                        today.getYear()
+                )
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Set a monthly budget before generating a forecast"
+                        )
+                );
+
+
+        long transactionCount =
+                expenseRepository.countByUserAndDateBetween(
+                        user,
+                        currentMonthStart,
+                        today
+                );
+
+
+        MLForecastRequest request =
+                new MLForecastRequest(
+                        today.getDayOfMonth(),
+                        spentSoFar,
+                        previousMonthSpend,
+                        budget.getAmount().doubleValue(),
+                        (int) transactionCount
+                );
+
+
+        return mlForecastService.getPrediction(request);
     }
 
 }

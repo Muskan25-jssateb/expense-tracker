@@ -87,3 +87,7 @@ export const getMonthlyComparison = (month, year) => {
         }
     });
 };
+
+export const getMLForecast = () => {
+    return api.get("/budgets/forecast");
+};

@@ -24,6 +24,11 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     List<Expense> findByCategoryAndUser(String category, User user);
 
     List<Expense> findByUserAndDateBetween(User user, LocalDate start, LocalDate end);
+    long countByUserAndDateBetween(
+            User user,
+            LocalDate start,
+            LocalDate end
+    );
 
     Expense findTopByUserOrderByAmountDesc(User user);
 
