@@ -3,7 +3,8 @@ import {
     getDashboard,
     getBudgetSummary,
     setBudget,
-    getMonthlyComparison
+    getMonthlyComparison,
+    getMLForecast
 } from "../services/expenseService";
 import {
     BarChart,
@@ -23,6 +24,7 @@ function Dashboard() {
 const [budgetAmount, setBudgetAmount] = useState("");
 const [budgetError, setBudgetError] = useState("");
 const [monthlyComparison, setMonthlyComparison] = useState(null);
+const [mlForecast, setMLForecast] = useState(null);
 
 const today = new Date();
 const currentMonth = today.getMonth() + 1;
@@ -125,6 +127,24 @@ const fetchMonthlyComparison = async () => {
     }
 };
 
+const fetchMLForecast = async () => {
+
+    try {
+
+        const response = await getMLForecast();
+
+        setMLForecast(response.data);
+
+    } catch (err) {
+
+        console.error(
+            "Unable to load ML forecast",
+            err
+        );
+
+    }
+};
+
 const handleSetBudget = async (e) => {
     e.preventDefault();
 
@@ -175,6 +195,7 @@ const handleSetBudget = async (e) => {
         fetchDashboard();
         fetchBudgetSummary();
         fetchMonthlyComparison();
+        fetchMLForecast();
 
     }, []);
 
@@ -420,6 +441,91 @@ const handleSetBudget = async (e) => {
     </form>
 
 </div>
+{mlForecast && (
+    <div className="card shadow-sm p-4 mt-4">
+
+        <div className="d-flex justify-content-between align-items-center mb-3">
+            <h5 className="mb-0">
+                ML Expense Forecast
+            </h5>
+
+            <span className="badge bg-primary">
+                Machine Learning
+            </span>
+        </div>
+
+        <div className="row g-4">
+
+            <div className="col-md-4">
+                <small className="text-muted">
+                    Predicted Month-End Spending
+                </small>
+
+                <h3>
+                    ₹{mlForecast.predicted_month_end_spending?.toFixed(0)}
+                </h3>
+            </div>
+
+            <div className="col-md-4">
+                <small className="text-muted">
+                    Monthly Budget
+                </small>
+
+                <h3>
+                    ₹{mlForecast.monthly_budget?.toFixed(0)}
+                </h3>
+            </div>
+
+            <div className="col-md-4">
+                <small className="text-muted">
+                    Predicted Difference
+                </small>
+
+                <h3
+                    className={
+                        mlForecast.will_exceed_budget
+                            ? "text-danger"
+                            : "text-success"
+                    }
+                >
+                    {mlForecast.predicted_difference > 0 ? "+" : ""}
+                    ₹{mlForecast.predicted_difference?.toFixed(0)}
+                </h3>
+            </div>
+
+        </div>
+
+        <div
+            className={
+                mlForecast.will_exceed_budget
+                    ? "alert alert-warning mt-4 mb-0"
+                    : "alert alert-success mt-4 mb-0"
+            }
+        >
+            {mlForecast.will_exceed_budget ? (
+                <>
+                    Based on your current spending pattern, the ML model
+                    predicts that you may exceed your monthly budget by{" "}
+                    <strong>
+                        ₹{mlForecast.predicted_difference?.toFixed(0)}
+                    </strong>.
+                </>
+            ) : (
+                <>
+                    Based on your current spending pattern, the ML model
+                    predicts that you may finish approximately{" "}
+                    <strong>
+                        ₹{Math.abs(
+                            mlForecast.predicted_difference
+                        ).toFixed(0)}
+                    </strong>{" "}
+                    under budget.
+                </>
+            )}
+        </div>
+
+    </div>
+)}
 
 {monthlyComparison && (
     <div className="card shadow-sm p-4 mt-4">

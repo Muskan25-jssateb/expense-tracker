@@ -1,0 +1,11 @@
+{
+    "model": "RandomForestRegressor",
+    "training_samples": 2400,
+    "testing_samples": 600,
+    "mae": 3158.52,
+    "r2_score": 0.9111,
+    "baseline_mae": 3344.63,
+    "baseline_r2_score": 0.9045,
+    "mae_improvement_percent": 5.56,
+    "dataset_type": "synthetic"
+}

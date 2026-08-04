@@ -31,3 +31,13 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Python / ML generated files
+ml-service/__pycache__/
+*.pyc
+
+# Generated ML dataset
+ml-service/data/*.csv
+
+# Trained ML model artifacts
+ml-service/models/*.pkl
