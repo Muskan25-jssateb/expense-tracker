@@ -4,7 +4,8 @@ import {
     getBudgetSummary,
     setBudget,
     getMonthlyComparison,
-    getMLForecast
+    getMLForecast,
+    getAIInsights
 } from "../services/expenseService";
 import {
     BarChart,
@@ -25,6 +26,9 @@ const [budgetAmount, setBudgetAmount] = useState("");
 const [budgetError, setBudgetError] = useState("");
 const [monthlyComparison, setMonthlyComparison] = useState(null);
 const [mlForecast, setMLForecast] = useState(null);
+const [aiInsights, setAIInsights] = useState("");
+const [aiLoading, setAILoading] = useState(false);
+const [aiError, setAIError] = useState("");
 
 const today = new Date();
 const currentMonth = today.getMonth() + 1;
@@ -141,6 +145,29 @@ const fetchMLForecast = async () => {
             "Unable to load ML forecast",
             err
         );
+
+    }
+};
+
+const handleGenerateAIInsights = async () => {
+
+    setAILoading(true);
+    setAIError("");
+
+    try {
+
+        const response = await getAIInsights();
+
+        setAIInsights(response.data);
+
+    } catch (err) {
+
+        console.error(err);
+        setAIError("Unable to generate AI spending insights");
+
+    } finally {
+
+        setAILoading(false);
 
     }
 };
@@ -526,6 +553,88 @@ const handleSetBudget = async (e) => {
 
     </div>
 )}
+
+{/* AI SPENDING ASSISTANT */}
+
+<div className="card shadow-sm p-4 mt-4">
+
+    <div className="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+            <h5 className="mb-1">
+                AI Spending Assistant
+            </h5>
+
+            <small className="text-muted">
+               AI-generated insights using your budget, spending trends and ML forecast
+            </small>
+            <div className="mt-2">
+            <small className="text-muted">
+                AI insights are informational and may not always be accurate.
+            </small>
+          </div>
+        </div>
+
+        <span className="badge bg-dark">
+            AI Powered
+        </span>
+
+    </div>
+
+
+    {!aiInsights && (
+
+        <button
+            className="btn btn-primary"
+            onClick={handleGenerateAIInsights}
+            disabled={aiLoading}
+        >
+            {aiLoading
+                ? "Generating Insights..."
+                : "Generate AI Insights"}
+        </button>
+
+    )}
+
+
+    {aiError && (
+
+        <div className="alert alert-danger mt-3 mb-0">
+            {aiError}
+        </div>
+
+    )}
+
+
+    {aiInsights && (
+
+        <div className="mt-3">
+
+            <div
+                 className="border rounded p-3 mb-3 bg-light"
+                 style={{
+                     whiteSpace: "pre-line",
+                     lineHeight: "1.7"
+                  }}
+            >
+                {aiInsights}
+            </div>
+
+            <button
+                className="btn btn-outline-primary btn-sm"
+                onClick={handleGenerateAIInsights}
+                disabled={aiLoading}
+            >
+                {aiLoading
+                    ? "Refreshing..."
+                    : "Refresh Insights"}
+            </button>
+
+        </div>
+
+    )}
+
+</div>
 
 {monthlyComparison && (
     <div className="card shadow-sm p-4 mt-4">
