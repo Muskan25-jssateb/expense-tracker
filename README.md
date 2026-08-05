@@ -7,6 +7,27 @@ The application allows users to securely manage expenses, set monthly budgets, a
 The system uses JWT-based authentication to provide user-specific expense tracking and combines traditional financial analytics, a Random Forest forecasting model, and the Gemini API to provide intelligent spending assistance.
 
 ---
+## Live Demo
+
+The application is deployed and available online:
+
+**Live Application:**  
+https://expense-tracker-alpha-one-29.vercel.app
+
+### Production Deployment
+
+| Component | Platform |
+|---|---|
+| React + Vite Frontend | Vercel |
+| Spring Boot Backend | Render |
+| MySQL Database | Aiven |
+| FastAPI ML Service | Render |
+| Spring Boot Containerization | Docker |
+| Generative AI | Google Gemini API |
+
+The production system uses environment variables for database credentials,
+API keys, and service configuration. Sensitive credentials are not stored
+in the repository.
 
 ## Features
 
@@ -125,13 +146,17 @@ The system uses JWT-based authentication to provide user-specific expense tracki
 - Google Gemini API
 - Prompt-based Financial Insight Generation
 
-### Tools
+### Tools & Deployment
 
 - Git & GitHub
+- Docker
 - Postman
 - Swagger UI
 - IntelliJ IDEA
 - VS Code
+- Vercel
+- Render
+- Aiven
 
 ---
 
@@ -178,6 +203,44 @@ The system uses JWT-based authentication to provide user-specific expense tracki
                                  |
                                  v
                            MySQL Database
+```
+
+### Production Architecture
+
+```text
+                    User
+                      |
+                      v
+              React + Vite
+                 Vercel
+                      |
+                      | HTTPS / REST API
+                      v
+              Spring Boot API
+                  Render
+                (Docker)
+                      |
+          +-----------+-----------+
+          |                       |
+          v                       v
+     Aiven MySQL            FastAPI ML Service
+      Database                   Render
+                                    |
+                                    v
+                              Random Forest
+                                    |
+                                    v
+                              ML Forecast
+                                    |
+                                    |
+                              Spring Boot
+                                    |
+                                    v
+                              Gemini API
+                                    |
+                                    v
+                         Personalized Insights
+
 ```
 ## Screenshots
 
@@ -469,13 +532,15 @@ expense-tracker/
 │   ├── requirements.txt
 │   └── models/
 │       └── model_metrics.json
-│
+|
+├── Dockerfile
 ├── pom.xml
 ├── .gitignore
 └── README.md
+
 ```
 
-Generated datasets, Python cache files, and trained `.pkl` model artifacts are excluded from Git.
+Generated datasets and Python cache files are excluded from Git. The trained production forecasting model is included so that the deployed ML service can load the model at runtime.
 
 ---
 
@@ -491,9 +556,19 @@ FastAPI ML Service  → Port 8000
 
 ### 1. Database
 
-Create and configure a MySQL database for the application.
+Create a MySQL database for the application.
 
-Configure the required database properties in the Spring Boot application configuration.
+The Spring Boot backend reads the database configuration from environment variables:
+
+```properties
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+```
+
+For local development, configure these environment variables using your local MySQL connection details.
+
+In production, the application uses a managed MySQL database hosted on Aiven with an SSL-secured connection.
 
 ---
 
@@ -602,6 +677,61 @@ The frontend runs on:
 ```text
 http://localhost:5173
 ```
+### Frontend API Configuration
+
+The frontend uses an environment variable to determine the Spring Boot backend URL:
+
+```text
+VITE_API_URL
+```
+
+For production, this variable points to the deployed Spring Boot backend.
+
+When `VITE_API_URL` is not defined, the frontend falls back to:
+
+```text
+http://localhost:8080
+```
+
+This allows the same frontend codebase to work in both local development and production.
+
+---
+
+## Deployment
+
+The application is deployed as multiple independently hosted services.
+
+### Frontend
+
+The React/Vite frontend is deployed on **Vercel**.
+
+### Backend
+
+The Spring Boot backend is containerized using **Docker** and deployed as a web service on **Render**.
+
+The Docker build uses Java 21 and Maven to build the Spring Boot application before running the generated JAR.
+
+### Database
+
+Production data is stored in a managed **MySQL database on Aiven** using an SSL-secured connection.
+
+### Machine Learning Service
+
+The FastAPI forecasting service is deployed independently on **Render**. The Spring Boot backend communicates with this service through REST to obtain month-end spending predictions.
+
+### Production Configuration
+
+Sensitive production configuration is supplied through environment variables, including:
+
+```text
+DB_URL
+DB_USERNAME
+DB_PASSWORD
+GEMINI_API_KEY
+VITE_API_URL
+```
+
+Secrets and production credentials are not hardcoded into the repository.
 
 ---
 
@@ -655,11 +785,10 @@ Explains:
 - Training Forecasting Models on Larger Real-world Datasets
 - Time-series Expense Forecasting
 - Improved Responsive UI
-- Docker Containerization
-- Cloud Deployment
 - Automated Model Retraining
-- Additional Model Monitoring
-
+- Model Performance Monitoring
+- CI/CD Pipeline
+- Automated Backend and ML Service Testing
 ---
 
 ## Future Goal
