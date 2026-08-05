@@ -41,3 +41,4 @@ ml-service/data/*.csv
 
 # Trained ML model artifacts
 ml-service/models/*.pkl
+!ml-service/models/expense_forecast_model.pkl
