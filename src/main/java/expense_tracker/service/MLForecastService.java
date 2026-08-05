@@ -18,7 +18,7 @@ public class MLForecastService {
             MLForecastRequest request
     ) {
 
-        String url = "http://localhost:8000/predict";
+        String url = "https://expense-tracker-ml-kxtj.onrender.com/predict";
 
         return restTemplate.postForObject(
                 url,
